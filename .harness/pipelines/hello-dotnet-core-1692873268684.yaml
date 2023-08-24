@@ -11,23 +11,54 @@ pipeline:
         repoName: krrishkishore/hello-dotnet-core
   stages:
     - stage:
-        identifier: build
         name: build
+        identifier: build
+        description: ""
+        type: CI
         spec:
           cloneCodebase: true
+          caching:
+            enabled: true
+            key: cache-{{ checksum "packages.lock.json" }}
+            paths:
+              - ~/.local/share/NuGet/cache
           execution:
             steps:
               - step:
-                  identifier: echo
-                  name: echo
-                  spec:
-                    command: echo hello world
-                  timeout: ""
                   type: Run
+                  identifier: dependencies
+                  name: Dependencies
+                  spec:
+                    shell: Sh
+                    command: dotnet add package Newtonsoft.json --version 12.0.1
+              - step:
+                  type: Run
+                  identifier: install_converter
+                  name: install converter
+                  spec:
+                    shell: Sh
+                    command: |-
+                      dotnet tool install -g trx2junit
+                      export PATH="$:/root/.dotnet/tools"
+              - step:
+                  type: Run
+                  identifier: build_dotnet_app
+                  name: Build DotNet App
+                  spec:
+                    shell: Sh
+                    command: |-
+                      dotnet restore
+                      dotnet build
+                      dotnet test --no-build --verbosity normal
+                      trx2junit results.trx
+                    reports:
+                      type: JUnit
+                      spec:
+                        paths:
+                          - results.xml
           platform:
             arch: Amd64
             os: Linux
           runtime:
             spec: {}
             type: Cloud
-        type: CI
