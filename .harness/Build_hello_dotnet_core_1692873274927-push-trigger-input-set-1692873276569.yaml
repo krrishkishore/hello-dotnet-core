@@ -1,0 +1,14 @@
+inputSet:
+  name: Build_hello_dotnet_core_1692873274927-push-trigger-input-set
+  identifier: Build_hello_dotnet_core_1692873274927pushtriggerinputset
+  orgIdentifier: default
+  projectIdentifier: GoTest
+  pipeline:
+    identifier: Build_hello_dotnet_core_1692873274927
+    properties:
+      ci:
+        codebase:
+          build:
+            type: branch
+            spec:
+              branch: <+trigger.branch>
