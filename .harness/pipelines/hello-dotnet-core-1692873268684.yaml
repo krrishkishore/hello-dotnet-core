@@ -56,3 +56,5 @@ pipeline:
           runtime:
             spec: {}
             type: Cloud
+          sharedPaths:
+            - ~/.local/share/NuGet/cache
