@@ -50,12 +50,6 @@ pipeline:
                       dotnet restore
                       dotnet build
                       dotnet test --no-build --verbosity normal
-                      trx2junit results.trx
-                    reports:
-                      type: JUnit
-                      spec:
-                        paths:
-                          - results.xml
           platform:
             arch: Amd64
             os: Linux
